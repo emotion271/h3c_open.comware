@@ -19,6 +19,8 @@ jobs:
       collection_pre_install: >-
         git+https://github.com/ansible-collections/ansible.utils.git
         git+https://github.com/ansible-collections/ansible.netcommon.git
+  ansible-lint:
+    uses: ansible-network/github_actions/.github/workflows/ansible-lint.yml@main
   all_green:
     if: ${{ always() && (github.event_name != 'schedule') }}
     needs:
@@ -29,4 +31,5 @@ jobs:
           python -c "assert 'failure' not in
           set([
           '${{ needs.sanity.result }}',
+          '${{ needs.ansible-lint.result }}',
           ])"
