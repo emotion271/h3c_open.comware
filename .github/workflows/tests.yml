@@ -25,6 +25,7 @@ jobs:
     if: ${{ always() && (github.event_name != 'schedule') }}
     needs:
       - sanity
+      - ansible-lint
     runs-on: ubuntu-latest
     steps:
       - run: >-
