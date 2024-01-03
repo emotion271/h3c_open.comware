@@ -19,12 +19,15 @@ jobs:
       collection_pre_install: >-
         git+https://github.com/ansible-collections/ansible.utils.git
         git+https://github.com/ansible-collections/ansible.netcommon.git
+  integration:
+    uses: ansible-network/github_actions/.github/workflows/integration.yml@main
   ansible-lint:
     uses: ansible-network/github_actions/.github/workflows/ansible-lint.yml@main
   all_green:
     if: ${{ always() && (github.event_name != 'schedule') }}
     needs:
       - sanity
+      - integration
       - ansible-lint
     runs-on: ubuntu-latest
     steps:
@@ -32,5 +35,6 @@ jobs:
           python -c "assert 'failure' not in
           set([
           '${{ needs.sanity.result }}',
+          '${{ needs.integration.result }}',
           '${{ needs.ansible-lint.result }}',
           ])"
